@@ -57,6 +57,64 @@ npm start
 
 服务将在 `http://localhost:3001` 启动。
 
+## Vercel 部署
+
+本项目已配置为可直接在 Vercel 上部署。
+
+### 部署步骤
+
+1. **安装 Vercel CLI（可选）**
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **通过 Vercel 网站部署**
+   - 访问 [Vercel](https://vercel.com/)
+   - 点击 "Import Project"
+   - 连接你的 Git 仓库（GitHub/GitLab/Bitbucket）
+   - Vercel 会自动检测项目配置
+   - 点击 "Deploy" 即可
+
+3. **通过 CLI 部署**
+   ```bash
+   vercel
+   ```
+
+4. **配置环境变量**
+   在 Vercel 项目设置中添加以下环境变量：
+   - `WPS_APP_ID` - WPS WebOffice 应用 ID
+   - `WPS_APP_SECRET` - WPS WebOffice 应用密钥
+   - `ENABLE_SIGNATURE` - 是否启用签名验证（true/false）
+   - `FILE_SERVICE_BASE_URL` - 文件服务基础 URL
+   - `DOWNLOAD_URL_PREFIX` - 文件下载 URL 前缀
+   - `UPLOAD_URL_PREFIX` - 文件上传 URL 前缀
+
+5. **获取部署地址**
+   部署完成后，Vercel 会提供一个 URL，例如：`https://your-project.vercel.app`
+   
+   回调网关地址应为：`https://your-project.vercel.app/v3/3rd`
+
+### 重要提示
+
+⚠️ **文件存储限制**：
+- Vercel 的 serverless 函数使用只读文件系统，**无法直接写入文件**
+- 如果需要在 `routes/save.js` 中保存文件，请使用以下方案之一：
+  1. 使用外部存储服务（如 AWS S3、阿里云 OSS、腾讯云 COS 等）
+  2. 使用数据库存储文件元信息
+  3. 使用 Vercel Blob Storage（Vercel 提供的存储服务）
+
+### 项目结构（Vercel）
+
+```
+weboffice-callback/
+├── api/
+│   └── index.js          # Vercel serverless 入口
+├── app.js                # Express 应用
+├── vercel.json           # Vercel 配置
+├── .vercelignore         # Vercel 忽略文件
+└── ...                   # 其他文件
+```
+
 ## 接口说明
 
 ### 文档预览接口
